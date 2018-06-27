@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<body>
+<h3>ITS Univie - StorageRoutingSystem</h3>
+<p><strong>Connected Nodes:</strong></p>
+{% for node in connected %}
+        <p>{{ node[0] }} | {{ node[1] }} | {{ node[2] }}<br></p>
+    {% endfor %}
+
+</body>
+</html>

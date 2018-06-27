@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ITS Mega Chain</title>
+    <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+</head>
+<body>
+
+    <style>
+    .dot {
+        height: 12px;
+        width: 12px;
+        background-color: {{hexcolor}};
+        border-radius: 50%;
+        display: inline-block;
+        margin-left: 10px;
+    }
+    #loading{
+        display: none;
+    }
+    </style>
+
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Univie ITS CHAIN</h5>
+      <nav class="my-2 my-md-0 mr-md-3">
+          <a class="p-2 text-dark" href="/">Home</a>
+        <a class="p-2 text-dark" href="/search">Search</a>
+        <a class="p-2 text-dark" href="/listall">ListALL</a>
+        <a class="p-2 text-dark" href="/insert">Insert</a>
+      </nav>
+      <a class="btn btn-outline-primary" href="/login">Log In</a>
+        <span class="dot"></span>
+    </div>
+
+    {% block body %}
+
+    <div class="container">
+        {% if session['active'] == "true" %}
+        <p>Connected to <i style="color: #28a745;">{{session['ethaccount']}}<strong>@</strong>{{session['ethnode']}}</i></p>
+        {% endif %}
+
+        <div class="card">
+          <div class="card-header">
+            Authenticate with Account
+          </div>
+          <div class="card-body">
+
+                  <div class="container">
+                      {% if status == "checked"%}
+                      <div class="alert alert-success">
+                          <strong>Success!</strong> You are authenticated
+                      </div>
+                      {% endif %}
+                      {% if status == "failed"%}
+                      <div class="alert alert-danger">
+                          <strong>FAILED!</strong> Account unlocking was not successful
+                      </div>
+                      {% endif %}
+                      <form action = "/login" method = "POST">
+                      <div class="form-group row">
+                        <label class="col-sm-4 col-form-label">Eth Node</label>
+                        <div class="col-sm-8 input-group">
+                          <input type="text" name="ethnode" class="form-control" id="" value="{{defaultnode}}" placeholder="ethnodeurl">
+                           <span class="input-group-btn">
+                            <input type="submit" id="connectsubmit" class="btn btn-outline-success" value="Connect" />
+                           </span>
+                        </div>
+                      </div>
+                      </form>
+                      <form action = "/login" method = "POST">
+                          <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Available Accounts</label>
+                              <div class="col-sm-8">
+                                <select class="form-control" name="ethaccount" id="ethaccount">
+                                    {% if accounts != "null"%}
+                                    {% for account in accounts %}
+                                  <option value="{{ account }}">{{ account }}</option>
+                                    {% endfor %}
+                                    {% endif %}
+                                </select>
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Password</label>
+                            <div class="col-sm-8">
+                              <input type="password" name="ethpass" class="form-control" id="" placeholder="">
+                            </div>
+                          </div>
+                          <p><input type="submit" class="btn btn-outline-success" value="Submit" /></p>
+                      </form>
+                  </div>
+
+
+          </div>
+        </div>
+        {% if connection == 2 %}
+        <p style="color: #a72824;">Unable to connect with <i>{{session['ethnode']}}</i></p>
+        {% endif %}
+        <p id="loading">Connecting <i class="fa fa-spinner fa-pulse fa-1x fa-fw"></i></p>
+    </div>
+
+    {% endblock %}
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+    <script>
+        $(document).ready(function () {
+            $( "#connectsubmit" ).click(function() {
+              $('#loading').toggle();
+            });
+        });
+    </script>
+</body>
+</html>
